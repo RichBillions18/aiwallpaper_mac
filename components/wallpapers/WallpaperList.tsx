@@ -15,7 +15,7 @@ export default function ({ wallpapers }: Props) {
             全部壁纸
           </h2>
           <p className="mt-4 text-gray-500 text-base">
-            一共 100 条由 AI 生成的壁纸
+            一共 {wallpapers.length} 条由 AI 生成的壁纸
           </p>
         </div>
 
@@ -24,7 +24,7 @@ export default function ({ wallpapers }: Props) {
             wallpapers.map((wallpaper: Wallpaper, idx: number) => {
               return (
                 <div
-                  key={wallpaper.created_at}
+                  key={wallpaper.id}
                   className="mx-auto w-full max-w-md gap-4 rounded-md bg-gray-100 p-8 text-black sm:px-4 sm:py-8"
                 >
                   <div className="mb-3 flex w-full items-center justify-between">

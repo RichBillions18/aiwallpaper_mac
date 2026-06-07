@@ -6,7 +6,7 @@ export default function () {
           <a href="#" className="mb-8 inline-block max-w-full text-black">
             AI 壁纸生成器
           </a>
-          <div className="max-[991px]: text-center font-semibold max-[991px]:py-1">
+          <div className="max-[991px]:text-center font-semibold max-[991px]:py-1">
             <a
               href="#"
               className="inline-block px-6 py-2 font-normal text-black transition hover:text-[#d6a701]"

@@ -4,6 +4,7 @@ import { getUserOrders } from "@/models/order";
 import { getUserWallpapersCount } from "@/models/wallpaper";
 
 export async function getUserCredits(user_email: string): Promise<UserCredits> {
+  // 初始赠送
   let user_credits: UserCredits = {
     one_time_credits: 2,
     monthly_credits: 1,

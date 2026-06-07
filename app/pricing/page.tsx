@@ -4,12 +4,8 @@ import { useEffect, useState } from "react";
 
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import Hero from "@/components/hero";
-import Image from "next/image";
-import Input from "@/components/input";
 import Pricing from "@/components/pricing";
 import { Wallpaper } from "@/types/wallpaper";
-import Wallpapers from "@/components/wallpapers";
 
 export default function Home() {
   const [wallpapers, setWallpapers] = useState<Wallpaper[]>([]);

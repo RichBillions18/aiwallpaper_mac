@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // check user auth
+    // check user auth 身份与积分检查
     const user = await currentUser();
     if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {
       return Response.json({
@@ -115,10 +115,8 @@ export async function POST(req: Request) {
       llm_params: JSON.stringify(llm_params),
       created_at: created_at,
     };
-
     // 保存到数据库
     await insertWallpaper(wallpaper);
-
     console.log("database response!!!");
 
     // 返回成功响应

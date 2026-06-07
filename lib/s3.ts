@@ -12,10 +12,11 @@ const client = new S3Client({
   },
 });
 
+// 实现下载图片并上传到 S3
 export async function downloadAndUploadImage(
   imageUrl: string,
   bucketName: string,
-  s3Key: string
+  s3Key: string,
 ) {
   try {
     const response = await fetch(imageUrl);
@@ -38,6 +39,7 @@ export async function downloadAndUploadImage(
   }
 }
 
+// 实现下载图片到本地
 export async function downloadImage(imageUrl: string, outputPath: string) {
   try {
     const response = await axios({

@@ -1,10 +1,10 @@
 "use client";
 
-import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Hero from "@/components/hero";
 import Input from "@/components/input";
 import Wallpapers from "@/components/wallpapers";
+import Footer from "@/components/footer";
 import { Wallpaper } from "@/types/wallpaper";
 import { useEffect, useState } from "react";
 import { useUser, SignInButton } from "@clerk/nextjs";
@@ -14,6 +14,7 @@ export default function Home() {
   const { isSignedIn, isLoaded } = useUser();
 
   const fetchWallpapers = async function () {
+    // 前端请求后端数据并解析响应内容
     const result = await fetch("/api/get-wallpapers");
     const { data } = await result.json();
 

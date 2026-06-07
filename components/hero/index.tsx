@@ -1,6 +1,6 @@
 export default function () {
   return (
-    <section className="relatve">
+    <section className="relative">
       <div className="mx-auto w-full max-w-7xl px-5 pt-4">
         <div className="mx-auto mb-12 w-full max-w-3xl text-center md:mb-16 lg:mb-20">
           <h1 className="mb-4 text-primary text-4xl font-semibold md:text-6xl">
