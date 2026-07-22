@@ -8,7 +8,7 @@ POST {{baseUrl}}/gen-wallpaper
 Content-Type: application/json
 
 {
-  "description": "happy chinese new year 2025"
+  "description": "have a party with friends in garden"
 }
 
 ### get-wallpapers

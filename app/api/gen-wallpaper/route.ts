@@ -44,17 +44,17 @@ export async function POST(req: Request) {
     if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {
       return Response.json({
         code: -2,
-        message: "user not login",
+        message: "请先登录",
       });
     }
     const user_email = user.emailAddresses[0].emailAddress;
     const credits = await getUserCredits(user_email);
     console.log("credits", credits);
 
-    if (credits.left_credits < 0) {
+    if (credits.left_credits <= 0) {
       return Response.json({
         code: -1,
-        message: "credits is not enough",
+        message: "积分不足，请前往付费页面购买",
       });
     }
     const nickname = user.firstName;
