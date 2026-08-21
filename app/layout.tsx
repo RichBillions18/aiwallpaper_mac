@@ -1,3 +1,21 @@
+/**
+ * 【第2阶段 · 布局】【第5阶段 · Clerk 总开关】【第8阶段 · 部署】app/layout.tsx
+ *
+ * 全站共用的「外壳」：每个 page.tsx 渲染时都会自动套在这里面。
+ * 没有 "use client" → 默认是服务端组件。
+ *
+ * 访问任意页面（如 /、/pricing）时的结构：
+ *   RootLayout（本文件）→ {children} 换成当前路由的 page 内容
+ *
+ * 【第5阶段】Clerk 三层结构（复习）：
+ *   1. ClerkProvider（本文件）→ 全站注入登录能力
+ *   2. middleware.ts → 每个请求校验会话 Cookie
+ *   3. useUser（页面）/ currentUser（API）→ 分别管 UI 和安全
+ *
+ * 【第8阶段】Clerk 密钥在 .env / Vercel 配置（Clerk 自动读取）：
+ *   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY、CLERK_SECRET_KEY
+ *   部署后还要在 Clerk 控制台把 Vercel 域名加入 Allowed origins / Redirect URLs
+ */
 import "./globals.css";
 
 import { ClerkProvider } from "@clerk/nextjs";
@@ -17,8 +35,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    // ClerkProvider：包住全站，子组件才能用 useUser / UserButton / RedirectToSignIn
     <ClerkProvider>
       <html lang="en">
+        {/* children：当前 URL 对应 page.tsx 的内容，会插在这里 */}
         <body className={inter.className}>{children}</body>
       </html>
     </ClerkProvider>

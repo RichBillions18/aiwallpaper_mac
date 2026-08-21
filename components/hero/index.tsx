@@ -1,3 +1,14 @@
+/**
+ * 【第1阶段 · 第1课】Hero 组件 —— 最简单的「纯展示」组件
+ *
+ * 特点：
+ *   - 没有 useState → 不存会变的数据
+ *   - 没有 props → 不从父组件接收数据
+ *   - 没有 "use client" → 不需要浏览器交互，默认就是服务端组件
+ *
+ * 组件 = 一个函数 + return 一段 JSX（看起来像 HTML 的结构）
+ * className = Tailwind CSS 样式类，用来控制颜色、字号、间距等
+ */
 export default function () {
   return (
     <section className="relative">

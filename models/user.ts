@@ -1,6 +1,7 @@
 import { User } from "@/types/user";
 import { getDb } from "./db";
 
+// 写入用户信息（gen-wallpaper 里目前注释掉了，登录数据主要来自 Clerk）
 export async function insertUser(user: User) {
   const createdAt: string = new Date().toISOString();
 

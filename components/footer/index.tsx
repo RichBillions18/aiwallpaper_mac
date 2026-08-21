@@ -1,3 +1,9 @@
+/**
+ * 【第1阶段 · 第1课】Footer 组件 —— 和 Hero 一样的「纯展示」组件
+ *
+ * 没有 state、没有 props、没有 API 调用，只负责渲染页脚静态内容。
+ * 在 page.tsx 里和 Header / Hero / Input / Wallpapers 一起拼成完整首页。
+ */
 export default function () {
   return (
     <footer className="block">
@@ -82,7 +88,7 @@ export default function () {
             </a>
           </div>
           <p className="max-[479px]:text-sm">
-            © Copyright 2025. All rights reserved.
+            © Copyright 2026. All rights reserved.
           </p>
         </div>
       </div>

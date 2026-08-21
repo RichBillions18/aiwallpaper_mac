@@ -1,9 +1,14 @@
+# 【第3阶段 · API 测试】先 pnpm dev 启动项目，再点 Send Request
+# 优点：跳过页面 UI，直接看 API 返回的 JSON
 @baseUrl = http://localhost:3000/api
 
-### test
+### hello-world
+GET {{baseUrl}}/hello-world
+
+### test —— 最简 POST
 POST {{baseUrl}}/test
 
-### gen-wallpaper
+### gen-wallpaper —— POST 需带 JSON body；需浏览器已登录（Clerk cookie），否则 code=-2
 POST {{baseUrl}}/gen-wallpaper
 Content-Type: application/json
 
@@ -11,5 +16,5 @@ Content-Type: application/json
   "description": "have a party with friends in garden"
 }
 
-### get-wallpapers
+### get-wallpapers —— GET 不需 body，浏览器地址栏也能直接访问
 GET {{baseUrl}}/get-wallpapers

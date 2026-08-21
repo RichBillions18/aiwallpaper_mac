@@ -1,7 +1,18 @@
+/**
+ * 【第4阶段 · SQL】【第7阶段 · 订单表】models/order.ts
+ *
+ * 支付链路中的三次写库：
+ *   insertOrder          checkout API，status=1 待支付
+ *   updateOrderSession   checkout API，写入 stripe_session_id
+ *   updateOrderStatus    pay-success 页，status=2 已支付
+ *
+ * getUserOrders 只查 status=2 且未过期 → service/order.ts 累加 credits
+ */
 import { Order } from "@/types/order";
 import { QueryResultRow } from "pg";
 import { getDb } from "@/models/db";
 
+// 【第7阶段】checkout 调用；order_status=1 表示待支付
 export async function insertOrder(order: Order) {
   const db = getDb();
   const res = await db.query(
@@ -44,6 +55,7 @@ export async function findOrderByOrderNo(
   return order;
 }
 
+// 【第7阶段】pay-success 调用；order_status 改为 2（已支付）
 export async function updateOrderStatus(
   order_no: string,
   order_status: number,
@@ -58,6 +70,7 @@ export async function updateOrderStatus(
   return res;
 }
 
+// 【第7阶段】Stripe Session 创建后，把 session_id 关联到订单
 export async function updateOrderSession(
   order_no: string,
   stripe_session_id: string
@@ -71,6 +84,7 @@ export async function updateOrderSession(
   return res;
 }
 
+// 【第7阶段】只统计已支付且未过期订单；无结果时 getUserCredits 用默认 3 次
 export async function getUserOrders(
   user_email: string
 ): Promise<Order[] | undefined> {

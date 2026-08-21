@@ -1,13 +1,22 @@
+/**
+ * 【第7阶段 · 前端发起支付】components/pricing/index.tsx
+ *
+ * 流程：点付款 → POST /api/checkout → loadStripe + redirectToCheckout → 用户去 Stripe 页付完
+ * 付成功后 Stripe 跳 /pay-success/[session_id]（见 app/pay-success），再回首页积分才增加。
+ */
+"use client";
+
 import { loadStripe } from "@stripe/stripe-js";
 
 export default function () {
   const handleCheckout = async () => {
     const params = {
-      amount: 990,
-      credits: 50,
-      plan: "subscribe",
+      amount: 990, // 美分，990 = $9.90（Stripe 用最小货币单位）
+      credits: 50, // 本单购买的生成次数，写入 orders 表
+      plan: "subscribe", // 传给 checkout；后端按 plan === "monthly" 判断是否订阅
     };
 
+    // 【第3阶段】POST + JSON body；【第7阶段】先让自家 API 建单，不直接调 Stripe
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: {
@@ -23,11 +32,13 @@ export default function () {
     const { public_key, session_id } = data;
     console.log("checkout res", public_key, session_id);
 
+    // 【第7阶段】公钥给浏览器；私钥只在 checkout API 里创建 Session
     const stripe = await loadStripe(public_key);
     if (!stripe) {
       return;
     }
 
+    // 跳到 Stripe 托管收银台；付完由 success_url 回到 /pay-success/...
     const result = await stripe.redirectToCheckout({
       sessionId: session_id,
     });

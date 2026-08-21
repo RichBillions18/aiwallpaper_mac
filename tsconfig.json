@@ -1,4 +1,5 @@
 {
+  // 【第8阶段】paths：@/ 表示项目根目录，如 import x from "@/models/db"
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -19,7 +20,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"] // @/components/header → 根目录下 components/header
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

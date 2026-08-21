@@ -1,10 +1,24 @@
+/**
+ * 【第3阶段 · POST】【第5阶段 · 鉴权】【第7阶段 · 创建订单 + Stripe Session】
+ * 【第8阶段 · 部署】/api/checkout
+ *
+ * 第7阶段四步：鉴权 → insertOrder(status=1) → Stripe 创建 Session → updateOrderSession
+ * 调用方：components/pricing/index.tsx
+ *
+ * 第8阶段环境变量（.env 本地 / Vercel 线上）：
+ *   STRIPE_PRIVATE_KEY  服务端创建 Session
+ *   STRIPE_PUBLIC_KEY   返回前端 loadStripe
+ *   WEB_BASE_URL        拼 success/cancel 跳转，上线必须改成 Vercel 域名，不能留 localhost
+ *
+ * 注意：此时只是「待支付」，积分要等 pay-success 把 status 改为 2 后，getUserCredits 才会计入。
+ */
 import { insertOrder, updateOrderSession } from "@/models/order";
 import { Order } from "@/types/order";
 import Stripe from "stripe";
 import { currentUser } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
-  // 0. 获取当前登录用户的标识
+  // 【第5阶段】0. 服务端取当前登录用户（Cookie → currentUser → email）
   const user = await currentUser();
   if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {
     return Response.json("not login");
@@ -24,7 +38,7 @@ export async function POST(req: Request) {
   const expired_at = oneMonthLater.toISOString();
   const order_no = new Date().getMilliseconds();
 
-  // 2. 创建订单
+  // 【第7阶段】2. 创建订单（order_status: 1 = 待支付，2 = 已支付在 pay-success 里改）
   const order: Order = {
     order_no: order_no.toString(),
     created_at: created_at,
@@ -40,7 +54,7 @@ export async function POST(req: Request) {
   // 把订单保存到 db
   await insertOrder(order);
 
-  // 3. 调 stripe 下单
+  // 【第7阶段】3. 用私钥向 Stripe 要收银台链接（STRIPE_PRIVATE_KEY 只在服务端）
   const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || "");
 
   const session = await stripe.checkout.sessions.create({
@@ -65,6 +79,7 @@ export async function POST(req: Request) {
       },
     ],
     allow_promotion_codes: false,
+    // metadata 挂在 Session 上，pay-success 页靠 order_no 找到要更新的订单
     metadata: {
       project: "aiwallpaper-demo",
       pay_scene: "buy-credits",
@@ -73,8 +88,9 @@ export async function POST(req: Request) {
       credits: params.credits,
     },
     mode: params.plan === "monthly" ? "subscription" : "payment",
-    success_url: `${process.env.WEB_BASE_URI}/pay-success/{CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.WEB_BASE_URI}/pricing`,
+    // 【第8阶段】WEB_BASE_URL：本地 http://localhost:3000，线上 https://你的域名.vercel.app
+    success_url: `${process.env.WEB_BASE_URL}/pay-success/{CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.WEB_BASE_URL}/pricing`,
   });
 
   console.log("pay result", session);
@@ -88,7 +104,7 @@ export async function POST(req: Request) {
     code: 0,
     message: "ok",
     data: {
-      public_key: process.env.STRIPE_PUBLIC_KEY,
+      public_key: process.env.STRIPE_PUBLIC_KEY, // 公钥可给浏览器；私钥 STRIPE_PRIVATE_KEY 只在上面用过
       order_no: order_no.toString(),
       session_id: stripe_session_id,
     },

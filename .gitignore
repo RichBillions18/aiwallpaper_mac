@@ -1,6 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+#
+# 【第8阶段 · Git】以下文件不提交：依赖可 pnpm install 恢复，密钥绝不能进仓库
 
-# dependencies
+# dependencies（pnpm install 会重新下载）
 /node_modules
 /.pnp
 .pnp.*
@@ -13,7 +15,7 @@
 # testing
 /coverage
 
-# next.js
+# next.js（build 产物，pnpm build 会重新生成）
 /.next/
 /out/
 
@@ -30,10 +32,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files：API 密钥、数据库 URL 等，本地用 .env，线上用 Vercel Environment Variables
 .env*
 
-# vercel
+# vercel（本地 vercel link 产生的配置，不必提交）
 .vercel
 
 # typescript
