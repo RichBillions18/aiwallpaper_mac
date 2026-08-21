@@ -15,16 +15,15 @@
 import { insertOrder, updateOrderSession } from "@/models/order";
 import { Order } from "@/types/order";
 import Stripe from "stripe";
-import { currentUser } from "@clerk/nextjs/server";
+import { getCurrentUserInfo } from "@/service/auth";
 
 export async function POST(req: Request) {
-  // 【第5阶段】0. 服务端取当前登录用户（Cookie → currentUser → email）
-  const user = await currentUser();
-  if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {
-    return Response.json("not login");
+  // 【第5阶段】0. 服务端取当前登录用户（Cookie → Clerk → email）
+  const user = await getCurrentUserInfo();
+  if (!user) {
+    return Response.json({ code: -2, message: "请先登录" });
   }
-  const user_email = user.emailAddresses[0].emailAddress;
-  console.log("user_email", user_email);
+  const user_email = user.email;
 
   // 1. 获取下单参数
   const params = await req.json();

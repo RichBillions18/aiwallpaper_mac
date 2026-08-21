@@ -9,12 +9,27 @@ GET {{baseUrl}}/hello-world
 POST {{baseUrl}}/test
 
 ### gen-wallpaper —— POST 需带 JSON body；需浏览器已登录（Clerk cookie），否则 code=-2
+# size: desktop | mobile | square（非法值会回落到 desktop）
+# tags: 见 lib/wallpaper-options.ts 的 STYLE_TAGS，最多 3 个，非法 id 会被丢掉
 POST {{baseUrl}}/gen-wallpaper
 Content-Type: application/json
 
 {
-  "description": "have a party with friends in garden"
+  "description": "雪山之上的极光，湖面倒影",
+  "size": "mobile",
+  "tags": ["landscape", "space"]
 }
 
-### get-wallpapers —— GET 不需 body，浏览器地址栏也能直接访问
-GET {{baseUrl}}/get-wallpapers
+### gen-wallpaper —— 敏感词 / 过短描述会被拦下，返回 code=400
+POST {{baseUrl}}/gen-wallpaper
+Content-Type: application/json
+
+{
+  "description": "a"
+}
+
+### get-wallpapers —— GET 不需 body；需登录；page/limit 控制分页（默认每页 9 张）
+GET {{baseUrl}}/get-wallpapers?page=1&limit=9
+
+### download-wallpaper —— 带 Content-Disposition 的原图下载，只能下自己的图
+GET {{baseUrl}}/download-wallpaper?id=1

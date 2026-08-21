@@ -4,7 +4,7 @@
  * 没有 state、没有 props、没有 API 调用，只负责渲染页脚静态内容。
  * 在 page.tsx 里和 Header / Hero / Input / Wallpapers 一起拼成完整首页。
  */
-export default function () {
+export default function Footer() {
   return (
     <footer className="block">
       <div className="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">

@@ -8,7 +8,7 @@
 
 import { loadStripe } from "@stripe/stripe-js";
 
-export default function () {
+export default function Pricing() {
   const handleCheckout = async () => {
     const params = {
       amount: 990, // 美分，990 = $9.90（Stripe 用最小货币单位）

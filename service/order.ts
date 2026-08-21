@@ -22,16 +22,17 @@ export async function getUserCredits(user_email: string): Promise<UserCredits> {
     left_credits: 3,
   };
 
-  console.log("user", user_credits);
-
   try {
+    // 两次查询互不依赖，并行发出。串行时慢链路上要 10 秒以上
     // 【第7阶段】已用：wallpapers 表里该 user_email 生成了几条
-    const used_credits = await getUserWallpapersCount(user_email);
-    console.log("used_credits", used_credits);
+    // 【第7阶段】已购：orders 表 status=2 且未过期的 credits 累加
+    const [used_credits, orders] = await Promise.all([
+      getUserWallpapersCount(user_email),
+      getUserOrders(user_email),
+    ]);
+
     user_credits.used_credits = Number(used_credits);
 
-    // 【第7阶段】已购：orders 表 status=2 且未过期的 credits 累加
-    const orders = await getUserOrders(user_email);
     if (!orders) {
       return user_credits;
     }

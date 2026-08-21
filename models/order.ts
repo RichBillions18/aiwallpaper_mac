@@ -10,12 +10,11 @@
  */
 import { Order } from "@/types/order";
 import { QueryResultRow } from "pg";
-import { getDb } from "@/models/db";
+import { query } from "@/models/db";
 
 // 【第7阶段】checkout 调用；order_status=1 表示待支付
 export async function insertOrder(order: Order) {
-  const db = getDb();
-  const res = await db.query(
+  const res = await query(
     `INSERT INTO orders 
         (order_no, created_at, user_email, amount, plan, expired_at, order_status, credits) 
         VALUES 
@@ -39,11 +38,9 @@ export async function insertOrder(order: Order) {
 export async function findOrderByOrderNo(
   order_no: number
 ): Promise<Order | undefined> {
-  const db = getDb();
-  const res = await db.query(
-    `SELECT * FROM orders WHERE order_no = $1 LIMIT 1`,
-    [order_no]
-  );
+  const res = await query(`SELECT * FROM orders WHERE order_no = $1 LIMIT 1`, [
+    order_no,
+  ]);
   if (res.rowCount === 0) {
     return undefined;
   }
@@ -61,8 +58,7 @@ export async function updateOrderStatus(
   order_status: number,
   paied_at: string
 ) {
-  const db = getDb();
-  const res = await db.query(
+  const res = await query(
     `UPDATE orders SET order_status=$1, paied_at=$2 WHERE order_no=$3`,
     [order_status, paied_at, order_no]
   );
@@ -75,8 +71,7 @@ export async function updateOrderSession(
   order_no: string,
   stripe_session_id: string
 ) {
-  const db = getDb();
-  const res = await db.query(
+  const res = await query(
     `UPDATE orders SET stripe_session_id=$1 WHERE order_no=$2`,
     [stripe_session_id, order_no]
   );
@@ -89,8 +84,7 @@ export async function getUserOrders(
   user_email: string
 ): Promise<Order[] | undefined> {
   const now = new Date().toISOString();
-  const db = getDb();
-  const res = await db.query(
+  const res = await query(
     `SELECT * FROM orders WHERE user_email = $1 AND order_status = 2 AND expired_at >= $2`,
     [user_email, now]
   );

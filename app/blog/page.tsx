@@ -10,7 +10,7 @@
 
 import { useUser, RedirectToSignIn } from "@clerk/nextjs";
 
-export default function () {
+export default function BlogPage() {
   // 【第5阶段】和首页同一套：isLoaded → isSignedIn → 再渲染内容
   const { isSignedIn, isLoaded } = useUser();
 

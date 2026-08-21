@@ -9,7 +9,7 @@
  * 组件 = 一个函数 + return 一段 JSX（看起来像 HTML 的结构）
  * className = Tailwind CSS 样式类，用来控制颜色、字号、间距等
  */
-export default function () {
+export default function Hero() {
   return (
     <section className="relative">
       <div className="mx-auto w-full max-w-7xl px-5 pt-4">

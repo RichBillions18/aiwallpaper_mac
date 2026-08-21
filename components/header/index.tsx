@@ -28,13 +28,14 @@
 
 import { useEffect, useState } from "react";
 import { UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 /** 父组件可选传入积分；传了就用传的，没传 Header 自己 fetch */
 interface Props {
   credits?: number;
 }
 
-export default function ({ credits: creditsFromParent }: Props) {
+export default function Header({ credits: creditsFromParent }: Props) {
   // creditsFromParent：父组件 prop 重命名，与内部 credits state 区分（模式 A / B）
   const [credits, setCredits] = useState(0); // 模式 B 时由 fetch 写入
 
@@ -77,17 +78,17 @@ export default function ({ credits: creditsFromParent }: Props) {
         <nav className="font-inter mx-auto h-auto w-full max-w-[1600px] lg:relative lg:top-0">
           {/* 横向布局：Logo | 付费 | (空白占位) | 积分 | 用户头像 */}
           <div className="flex flex-row items-center px-6 py-8 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-4 xl:px-20">
-            {/* Logo，点击回首页 */}
-            <a
+            {/* Logo，点击回首页；站内跳转用 next/link，不会整页刷新 */}
+            <Link
               href="/"
               className="flex-1 text-xl font-medium flex items-center"
             >
               <span className="font-bold text-primary text-2xl">
                 AI Wallpaper
               </span>
-            </a>
+            </Link>
 
-            <a href="/pricing">付费</a>
+            <Link href="/pricing">付费</Link>
 
             {/* flex-1 空白 div：把后面的积分和头像推到右侧 */}
             <div className="flex-1"></div>
