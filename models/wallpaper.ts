@@ -94,3 +94,16 @@ export async function getUserWallpapersCount(
   // 返回数量字段
   return row.count;
 }
+
+/*
+res 是 pg 的 QueryResult（查询结果对象），大致长这样：
+{
+  command: "SELECT",   // 执行的是哪种 SQL
+  rowCount: 1,         // 返回了几行
+  rows: [              // 真正的数据，数组
+    { count: "3" }     // 列名 count（SQL 里 as count）→ 值 3
+  ],
+  fields: [...],       // 字段元信息（一般用不到）
+  oid: ...
+}
+*/
